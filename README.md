@@ -1,12 +1,15 @@
-# Lemonaide 🍋
+# 🍋 lemonaide
 
-A gamified financial literacy assistant for kids (ages 5–12) and their parents. Kids track earnings, set savings goals, learn through an AI coach, and unlock playful progress rewards.
+[started during [cseed](https://www.cseed.co/buildher-team) BuildHER Launchpad Cohort 0] \
+\
+💵 gamified financial literacy assistant for kids (ages 5–12) and parents. \
+🐷 kids track earnings, set savings goals, learn through an AI coach, unlock progress rewards, etc.
 
 ## Stack
 
 | Layer | Tech |
 |-------|------|
-| UI | Flutter, Google Fonts (Quicksand + Fredoka), Flutter Animate |
+| UI | Flutter, Google Fonts, Flutter Animate |
 | State | Riverpod |
 | Navigation | GoRouter |
 | Backend | Firebase Auth, Cloud Firestore, Analytics |
@@ -83,7 +86,3 @@ Uncomment Firebase init in `lib/bootstrap.dart` and add `firebase_options.dart` 
 - [ ] AI coach (OpenAI, child-safe prompts)
 - [ ] Savings goals + cup visualization
 - [ ] Progress, streaks, badges
-
-## License
-
-Private — all rights reserved.
