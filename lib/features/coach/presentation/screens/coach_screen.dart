@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
-import '../../../../core/spacing/app_spacing.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_card.dart';
+import '../../../../core/design_system/design_system.dart';
 import '../../../../core/widgets/placeholder_screen.dart';
 
 class CoachScreen extends StatelessWidget {
@@ -22,10 +20,8 @@ class CoachScreen extends StatelessWidget {
     return PlaceholderScreen(
       title: AppStrings.coachTitle,
       subtitle: AppStrings.coachSubtitle,
-      icon: Icons.chat_bubble_rounded,
-      accentColor: AppColors.skyBlue,
       children: [
-        AppCard(
+        LemonCard(
           backgroundColor: AppColors.skyBlue.withValues(alpha: 0.2),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,27 +51,27 @@ class CoachScreen extends StatelessWidget {
           runSpacing: AppSpacing.sm,
           children: [
             for (final prompt in _starters)
-              ActionChip(
-                label: Text(prompt),
+              LemonWireframeChip(
+                label: prompt,
+                icon: Icons.chat_bubble_outline_rounded,
+                backgroundColor: AppColors.pastelYellow,
                 onPressed: () {},
-                backgroundColor: AppColors.pastelYellow.withValues(alpha: 0.5),
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      AppSpacing.borderRadius(AppSpacing.radiusFull),
-                ),
               ),
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        const ComingSoonCard(
-          message:
-              'Full AI chat with OpenAI, child-safe prompts, and conversation memory coming soon.',
+        RoundedInputField(
+          label: 'Ask your coach',
+          hint: 'What is profit?',
+          prefixIcon: Icons.chat_bubble_outline_rounded,
+          maxLines: 2,
         ),
         const SizedBox(height: AppSpacing.md),
-        AppButton(
+        LemonButton(
           label: 'Start conversation',
-          variant: AppButtonVariant.sky,
+          variant: LemonButtonVariant.sky,
           icon: Icons.send_rounded,
+          size: LemonButtonSize.lg,
           expand: true,
           onPressed: () {},
         ),

@@ -1,93 +1,129 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
+import '../../../../core/router/app_routes.dart';
 import '../../../../core/spacing/app_spacing.dart';
-import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/app_card.dart';
-import '../../../../core/widgets/placeholder_screen.dart';
+import '../providers/dashboard_provider.dart';
+import '../widgets/dashboard_action_button.dart';
+import '../widgets/dashboard_goal_box.dart';
+import '../widgets/dashboard_stat_box.dart';
+import '../widgets/dashboard_todo_box.dart';
+import '../widgets/earnings_cup.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
+
+  static const _rowGap = AppSpacing.sm;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final d = ref.watch(dashboardProvider);
+    final padding = AppSpacing.screenPadding(context);
+    final currency = NumberFormat.currency(symbol: r'$');
+
+    return Padding(
+      padding: EdgeInsets.all(padding),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 5,
+            child: _LeftPanel(earnedCents: d.totalEarnedCents),
+          ),
+          const SizedBox(width: AppSpacing.md),
+          Expanded(
+            flex: 6,
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DashboardStatBox(
+                          label: 'Current savings',
+                          value: currency.format(d.currentSavingsCents / 100),
+                          backgroundColor: AppColors.mintGreen,
+                        ),
+                      ),
+                      const SizedBox(width: _rowGap),
+                      Expanded(
+                        child: DashboardStatBox(
+                          label: 'This week',
+                          value: currency.format(d.weekEarnedCents / 100),
+                          backgroundColor: AppColors.skyBlue,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: _rowGap),
+                Expanded(
+                  flex: 3,
+                  child: DashboardTodoBox(todos: d.todos),
+                ),
+                const SizedBox(height: _rowGap),
+                Expanded(
+                  flex: 2,
+                  child: DashboardGoalBox(goal: d.activeGoal),
+                ),
+                const SizedBox(height: _rowGap),
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DashboardActionButton(
+                          label: 'Add earnings',
+                          icon: Icons.add_rounded,
+                          backgroundColor: AppColors.lemonYellow,
+                          onTap: () => context.go(AppRoutes.earnings),
+                        ),
+                      ),
+                      const SizedBox(width: _rowGap),
+                      Expanded(
+                        child: DashboardActionButton(
+                          label: 'Log chore',
+                          icon: Icons.cleaning_services_rounded,
+                          backgroundColor: AppColors.mintGreen,
+                          onTap: () => context.go(AppRoutes.earnings),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Cup centered in the upper area; total earned aligned with the action-button row.
+class _LeftPanel extends StatelessWidget {
+  const _LeftPanel({required this.earnedCents});
+
+  final int earnedCents;
 
   @override
   Widget build(BuildContext context) {
-    return PlaceholderScreen(
-      title: AppStrings.homeTitle,
-      subtitle: AppStrings.homeSubtitle,
-      icon: Icons.home_rounded,
-      accentColor: AppColors.pastelYellow,
+    return Column(
       children: [
-        const AppStatCard(
-          label: 'Total saved',
-          value: '\$0.00',
-          icon: Icons.savings_rounded,
-          accentColor: AppColors.mintGreen,
+        const Expanded(
+          flex: 7,
+          child: EarningsCup(),
         ),
-        const SizedBox(height: AppSpacing.md),
-        Row(
-          children: [
-            Expanded(
-              child: AppStatCard(
-                label: 'Streak',
-                value: '0 days',
-                icon: Icons.local_fire_department_rounded,
-                accentColor: AppColors.lemonYellow,
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: AppStatCard(
-                label: 'Earned',
-                value: '\$0.00',
-                icon: Icons.paid_rounded,
-                accentColor: AppColors.blue,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        AppCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Your coin jar',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: AppSpacing.md),
-              ClipRRect(
-                borderRadius: AppSpacing.borderRadius(AppSpacing.radiusFull),
-                child: LinearProgressIndicator(
-                  value: 0.15,
-                  minHeight: 16,
-                  backgroundColor: AppColors.skyBlue.withValues(alpha: 0.3),
-                  color: AppColors.lemonYellow,
-                  borderRadius: AppSpacing.borderRadius(AppSpacing.radiusFull),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                'Keep earning to fill it up!',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        AppButton(
-          label: 'Log earnings',
-          icon: Icons.add_rounded,
-          expand: true,
-          onPressed: () {},
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        AppButton(
-          label: 'Chat with coach',
-          variant: AppButtonVariant.sky,
-          icon: Icons.chat_rounded,
-          expand: true,
-          onPressed: () {},
+        const SizedBox(height: HomeScreen._rowGap),
+        const SizedBox(height: HomeScreen._rowGap),
+        const SizedBox(height: HomeScreen._rowGap),
+        Expanded(
+          flex: 3,
+          child: TotalEarnedDisplay(earnedCents: earnedCents),
         ),
       ],
     );
