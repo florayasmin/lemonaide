@@ -1,81 +1,109 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/design_system/design_system.dart';
-import '../../../../core/widgets/placeholder_screen.dart';
+import '../../../../core/spacing/app_spacing.dart';
+import '../../data/mock/coach_intro_slides.dart';
+import '../widgets/coach_chat_bar.dart';
+import '../widgets/coach_story_widgets.dart';
+import '../widgets/story_nav_button.dart';
 
-class CoachScreen extends StatelessWidget {
+class CoachScreen extends StatefulWidget {
   const CoachScreen({super.key});
 
-  static const _starters = [
-    'What is profit?',
-    'Should I save or spend?',
-    'How do I set a price?',
-    'What is a budget?',
-  ];
+  @override
+  State<CoachScreen> createState() => _CoachScreenState();
+}
+
+class _CoachScreenState extends State<CoachScreen> {
+  final _chatController = TextEditingController();
+  int _pageIndex = 0;
+
+  List<String> get _slides => CoachIntroSlides.slides;
+
+  @override
+  void dispose() {
+    _chatController.dispose();
+    super.dispose();
+  }
+
+  void _goPrevious() {
+    if (_pageIndex > 0) {
+      setState(() => _pageIndex--);
+    }
+  }
+
+  void _goNext() {
+    if (_pageIndex < _slides.length - 1) {
+      setState(() => _pageIndex++);
+    }
+  }
+
+  void _sendMessage() {
+    final message = _chatController.text.trim();
+    if (message.isEmpty) {
+      return;
+    }
+
+    FocusScope.of(context).unfocus();
+    _chatController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return PlaceholderScreen(
-      title: AppStrings.coachTitle,
-      subtitle: AppStrings.coachSubtitle,
-      children: [
-        LemonCard(
-          backgroundColor: AppColors.skyBlue.withValues(alpha: 0.2),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    final padding = AppSpacing.screenPadding(context);
+    final isFirstPage = _pageIndex == 0;
+    final isLastPage = _pageIndex >= _slides.length - 1;
+
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textTheme: GoogleFonts.quicksandTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
+      child: ColoredBox(
+        color: AppColors.cream,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            padding,
+            AppSpacing.md,
+            padding,
+            AppSpacing.md,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const CircleAvatar(
-                backgroundColor: AppColors.blue,
-                child: Icon(Icons.waving_hand_rounded, color: AppColors.cream),
-              ),
-              const SizedBox(width: AppSpacing.md),
               Expanded(
-                child: Text(
-                  "Hey! I'm your Lemonaide coach — like a friendly older sibling who loves business. What did you earn today?",
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
+                child: StoryPagePanel(text: _slides[_pageIndex]),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  StoryNavButton(
+                    pointingRight: false,
+                    enabled: !isFirstPage,
+                    onPressed: isFirstPage ? null : _goPrevious,
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  StoryNavButton(
+                    pointingRight: true,
+                    enabled: !isLastPage,
+                    onPressed: isLastPage ? null : _goNext,
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: CoachChatBar(
+                      controller: _chatController,
+                      onSend: _sendMessage,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
         ),
-        const SizedBox(height: AppSpacing.lg),
-        Text(
-          'Try asking:',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Wrap(
-          spacing: AppSpacing.sm,
-          runSpacing: AppSpacing.sm,
-          children: [
-            for (final prompt in _starters)
-              LemonWireframeChip(
-                label: prompt,
-                icon: Icons.chat_bubble_outline_rounded,
-                backgroundColor: AppColors.pastelYellow,
-                onPressed: () {},
-              ),
-          ],
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        RoundedInputField(
-          label: 'Ask your coach',
-          hint: 'What is profit?',
-          prefixIcon: Icons.chat_bubble_outline_rounded,
-          maxLines: 2,
-        ),
-        const SizedBox(height: AppSpacing.md),
-        LemonButton(
-          label: 'Start conversation',
-          variant: LemonButtonVariant.sky,
-          icon: Icons.send_rounded,
-          size: LemonButtonSize.lg,
-          expand: true,
-          onPressed: () {},
-        ),
-      ],
+      ),
     );
   }
 }
