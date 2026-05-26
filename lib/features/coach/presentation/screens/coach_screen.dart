@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/spacing/app_spacing.dart';
@@ -55,15 +54,9 @@ class _CoachScreenState extends State<CoachScreen> {
     final isFirstPage = _pageIndex == 0;
     final isLastPage = _pageIndex >= _slides.length - 1;
 
-    return Theme(
-      data: Theme.of(context).copyWith(
-        textTheme: GoogleFonts.quicksandTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
-      child: ColoredBox(
-        color: AppColors.cream,
-        child: Padding(
+    return ColoredBox(
+      color: AppColors.cream,
+      child: Padding(
           padding: EdgeInsets.fromLTRB(
             padding,
             AppSpacing.md,
@@ -103,7 +96,6 @@ class _CoachScreenState extends State<CoachScreen> {
             ],
           ),
         ),
-      ),
     );
   }
 }

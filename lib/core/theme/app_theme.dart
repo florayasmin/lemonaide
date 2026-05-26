@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/app_colors.dart';
+import '../design_system/tokens/wireframe_styles.dart';
 import '../spacing/app_spacing.dart';
 import 'app_text_styles.dart';
 
@@ -33,7 +35,8 @@ abstract final class AppTheme {
     required Color navRailBackground,
   }) {
     final isDark = brightness == Brightness.dark;
-    final textTheme = AppTextStyles.textTheme(isDark: isDark);
+    final baseTextTheme = AppTextStyles.textTheme(isDark: isDark);
+    final textTheme = GoogleFonts.quicksandTextTheme(baseTextTheme);
 
     return ThemeData(
       useMaterial3: true,
@@ -86,18 +89,32 @@ abstract final class AppTheme {
           vertical: AppSpacing.md,
         ),
         border: OutlineInputBorder(
-          borderRadius: AppSpacing.borderRadius(AppSpacing.radiusXl),
-          borderSide: BorderSide.none,
+          borderRadius: AppSpacing.borderRadius(AppSpacing.radiusLg),
+          borderSide: const BorderSide(
+            color: AppColors.slate,
+            width: WireframeStyles.borderWidth,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: AppSpacing.borderRadius(AppSpacing.radiusXl),
-          borderSide: BorderSide(
-            color: colorScheme.outline.withValues(alpha: 0.25),
+          borderRadius: AppSpacing.borderRadius(AppSpacing.radiusLg),
+          borderSide: const BorderSide(
+            color: AppColors.slate,
+            width: WireframeStyles.borderWidth,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: AppSpacing.borderRadius(AppSpacing.radiusXl),
-          borderSide: BorderSide(color: colorScheme.primary, width: 2),
+          borderRadius: AppSpacing.borderRadius(AppSpacing.radiusLg),
+          borderSide: const BorderSide(
+            color: AppColors.slate,
+            width: WireframeStyles.borderWidth,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: AppSpacing.borderRadius(AppSpacing.radiusLg),
+          borderSide: const BorderSide(
+            color: AppColors.error,
+            width: WireframeStyles.borderWidth,
+          ),
         ),
       ),
       snackBarTheme: const SnackBarThemeData(

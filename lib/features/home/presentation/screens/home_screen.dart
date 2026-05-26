@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/spacing/app_spacing.dart';
+import '../../../../core/state/earnings_input_provider.dart';
+import '../../../earnings/domain/entities/earning.dart';
 import '../providers/dashboard_provider.dart';
 import '../widgets/dashboard_action_button.dart';
 import '../widgets/dashboard_goal_box.dart';
@@ -89,7 +91,11 @@ class HomeScreen extends ConsumerWidget {
                           label: 'Log chore',
                           icon: Icons.cleaning_services_rounded,
                           backgroundColor: AppColors.mintGreen,
-                          onTap: () => context.go(AppRoutes.earnings),
+                          onTap: () {
+                            ref.read(pendingEarningSourceProvider.notifier).state =
+                                EarningSource.chores;
+                            context.go(AppRoutes.earnings);
+                          },
                         ),
                       ),
                     ],

@@ -13,6 +13,41 @@ abstract final class WireframeStyles {
         border: Border.all(color: AppColors.slate, width: borderWidth),
       );
 
+  static TextStyle pageTitleStyle(BuildContext context) =>
+      Theme.of(context).textTheme.displayMedium!.copyWith(
+            color: AppColors.slate,
+            fontWeight: FontWeight.w800,
+            fontSize: 32,
+          );
+
+  static TextStyle pageSubtitleStyle(BuildContext context) =>
+      Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: AppColors.slate.withValues(alpha: 0.7),
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          );
+
+  static TextStyle titleStyle(BuildContext context) =>
+      Theme.of(context).textTheme.titleLarge!.copyWith(
+            color: AppColors.slate,
+            fontWeight: FontWeight.w800,
+            fontSize: 20,
+          );
+
+  static TextStyle labelStyle(BuildContext context) =>
+      Theme.of(context).textTheme.titleMedium!.copyWith(
+            color: AppColors.slate,
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          );
+
+  static TextStyle valueStyle(BuildContext context) =>
+      Theme.of(context).textTheme.headlineLarge!.copyWith(
+            color: AppColors.slate,
+            fontWeight: FontWeight.w800,
+            fontSize: 28,
+          );
+
   static TextStyle buttonLabelStyle(
     BuildContext context, {
     double fontSize = 18,

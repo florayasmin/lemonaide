@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_colors.dart';
 import '../design_system/design_system.dart';
 import '../spacing/app_spacing.dart';
 
@@ -20,59 +21,29 @@ class PlaceholderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final padding = AppSpacing.screenPadding(context);
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(
-        padding,
-        padding,
-        padding,
-        AppSpacing.xxl,
-      ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: AppSpacing.maxContentWidth),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _Header(title: title, subtitle: subtitle),
-              SizedBox(height: AppSpacing.sectionGap(context)),
-              ...children,
-            ],
+    return ColoredBox(
+      color: AppColors.cream,
+      child: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(
+          padding,
+          AppSpacing.md,
+          padding,
+          AppSpacing.xxl,
+        ),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: AppSpacing.maxContentWidth),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                WireframePageHeader(title: title, subtitle: subtitle),
+                SizedBox(height: AppSpacing.sectionGap(context)),
+                ...children,
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header({
-    required this.title,
-    required this.subtitle,
-  });
-
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.displayMedium,
-        ),
-        const SizedBox(height: AppSpacing.xs),
-        Text(
-          subtitle,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.7),
-              ),
-        ),
-      ],
     );
   }
 }
@@ -92,13 +63,13 @@ class ComingSoonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LemonCard(
+    return WireframePanel(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             message,
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: WireframeStyles.labelStyle(context),
             textAlign: TextAlign.center,
           ),
           if (actionLabel != null) ...[

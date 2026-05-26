@@ -12,6 +12,7 @@ class LemonWireframeChip extends StatelessWidget {
     required this.icon,
     required this.backgroundColor,
     this.onPressed,
+    this.isSelected = false,
     super.key,
   });
 
@@ -19,6 +20,7 @@ class LemonWireframeChip extends StatelessWidget {
   final IconData icon;
   final Color backgroundColor;
   final VoidCallback? onPressed;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,12 @@ class LemonWireframeChip extends StatelessWidget {
           horizontal: AppSpacing.md,
           vertical: AppSpacing.sm,
         ),
-        decoration: WireframeStyles.boxDecoration(color: backgroundColor),
+        decoration: WireframeStyles.boxDecoration(color: backgroundColor).copyWith(
+          border: Border.all(
+            color: AppColors.slate,
+            width: isSelected ? WireframeStyles.borderWidth + 1.5 : WireframeStyles.borderWidth,
+          ),
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

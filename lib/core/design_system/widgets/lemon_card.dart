@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../constants/app_colors.dart';
 import '../../spacing/app_spacing.dart';
-import '../../theme/app_text_styles.dart';
 import '../foundation/lemon_interactive.dart';
 import '../tokens/app_motion.dart';
-import '../tokens/app_shadows.dart';
+import '../tokens/wireframe_styles.dart';
 
 class LemonCard extends StatelessWidget {
   const LemonCard({
@@ -30,24 +28,18 @@ class LemonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = backgroundColor ?? AppColors.surface(isDark);
-    final border = borderColor ?? AppColors.border(isDark);
+    final bg = backgroundColor ?? AppColors.creamSurface;
     final radius = AppSpacing.borderRadius(AppSpacing.radiusLg);
 
-    Widget card = DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: radius,
-        boxShadow: AppShadows.soft(isDark: isDark),
-      ),
-      child: Material(
-        color: bg,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: radius,
-          side: BorderSide(color: border, width: 1.5),
+    Widget card = Container(
+      decoration: WireframeStyles.boxDecoration(color: bg).copyWith(
+        border: Border.all(
+          color: borderColor ?? AppColors.slate,
+          width: WireframeStyles.borderWidth,
         ),
-        clipBehavior: Clip.antiAlias,
+      ),
+      child: ClipRRect(
+        borderRadius: radius,
         child: accent != null
             ? Stack(
                 children: [
@@ -112,36 +104,20 @@ class LemonStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = accentColor ?? AppColors.blue;
+    final accent = accentColor ?? AppColors.mintGreen;
 
     return LemonCard(
-      backgroundColor: accent.withValues(alpha: 0.12),
-      borderColor: accent.withValues(alpha: 0.35),
-      accent: accent,
+      backgroundColor: accent,
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(AppSpacing.sm),
-            decoration: BoxDecoration(
-              color: accent.withValues(alpha: 0.22),
-              borderRadius: AppSpacing.borderRadius(AppSpacing.radiusMd),
-            ),
-            child: Icon(icon, color: accent, size: AppSpacing.iconLg),
-          )
-              .animate(onPlay: (c) => c.repeat(reverse: true))
-              .scale(
-                begin: const Offset(1, 1),
-                end: const Offset(1.06, 1.06),
-                duration: 1800.ms,
-                curve: Curves.easeInOut,
-              ),
+          Icon(icon, color: AppColors.slate, size: AppSpacing.iconLg),
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: AppTextStyles.captionMuted(context)),
-                Text(value, style: Theme.of(context).textTheme.headlineMedium),
+                Text(label, style: WireframeStyles.labelStyle(context)),
+                Text(value, style: WireframeStyles.valueStyle(context)),
               ],
             ),
           ),
